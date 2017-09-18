@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <template id="template_acc_factura_cfdi" inherit_id="account.report_invoice_document">
+            <xpath expr="//div[@class='page']" position="replace">
+                <div class="page">
+                    <table class="table table-condensed" width="100%" style="font-size:9px;background-color: #FFFFFF;border: 1px solid #ddd;border-collapse: collapse;padding: 5px;">
+                        <tr>
+                            <td width="20%" colspan="3" align="center" valign="middle" style="border: 1px solid white;">
+                                <img t-if="o.company_emitter_id.logo" t-att-src="'data:image/png;base64,%s' % o.company_emitter_id.logo" style="max-height: 90px;height: auto;"/>
+                            </td>
+                            <td width="50%" colspan="3" align="center" valign="top" style="border: 1px solid white;">
+                                <strong>
+                                    <span t-field="o.company_emitter_id.partner_id.name" style="font-size:12px;"/><BR/>
+                                    <span t-if="o.invoice_sequence_id.approval_id.serie=='HM'" style="font-size:14px; color: darkred; ">HERMOSILLO</span>
+                                    <span t-if="o.invoice_sequence_id.approval_id.serie=='HMUSD'" style="font-size:14px; color: darkred; ">HERMOSILLO</span>
+                                    <span t-if="o.invoice_sequence_id.approval_id.serie=='NCHM'" style="font-size:14px; color: darkred; ">HERMOSILLO</span>
+                                    <span t-if="o.invoice_sequence_id.approval_id.serie=='NCHMUSD'" style="font-size:14px; color: darkred; ">HERMOSILLO</span>
+                                    <span t-if="o.invoice_sequence_id.approval_id.serie=='CL'" style="font-size:14px; color: darkred; ">CULIACAN</span>
+                                    <span t-if="o.invoice_sequence_id.approval_id.serie=='CLUSD'" style="font-size:14px; color: darkred; ">CULIACAN</span>
+                                    <span t-if="o.invoice_sequence_id.approval_id.serie=='NCCL'" style="font-size:14px; color: darkred; ">CULIACAN</span>
+                                    <span t-if="o.invoice_sequence_id.approval_id.serie=='NCCLUSD'" style="font-size:14px; color: darkred; ">CULIACAN</span>
+                                </strong>
+                                <BR/>
+                                <div style="font-size:10px;">
+                                    <span t-field="o.company_emitter_id.partner_id.street"/>
+                                    <span t-if="o.company_emitter_id.partner_id.l10n_mx_street3"> No. <span t-field="o.company_emitter_id.partner_id.l10n_mx_street3"/></span>
+                                    <span t-if="o.company_emitter_id.partner_id.l10n_mx_street4"> Int. <span t-field="o.company_emitter_id.partner_id.l10n_mx_street4"/></span>
+                                    <BR/>
+                                    <span t-field="o.company_emitter_id.partner_id.street2"/>, 
+                                    C.P. <span t-field="o.company_emitter_id.partner_id.zip"/>
+                                    <BR/>
+                                    <span t-field="o.company_emitter_id.partner_id.l10n_mx_city2"/>
+                                    <span t-field="o.company_emitter_id.partner_id.city"/>, 
+                                    <span t-field="o.company_emitter_id.partner_id.state_id.name"/>, 
+                                    <span t-field="o.company_emitter_id.partner_id.country_id.name"/>
+                                    <BR/>
+                                    RFC: <span t-if="o.company_emitter_id.partner_id.vat">
+                                    <span t-field="o.company_emitter_id.partner_id.vat_split"/></span><BR/>
+                                    Tel: <span t-field="o.company_emitter_id.phone" /><BR/>
+                                    www.ideasconstructivas.com<BR/>
+                                    <span t-field="o.company_emitter_id.partner_id.regimen_fiscal_id.name"/>
+                                </div>                            
+                                    
+                                <!--<address t-field="o.company_emitter_id.partner_id"
+                                    t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": True}' />-->
+                            </td>
+                            <td width="30%" colspan="3" valign="top" style="border: 1px solid white;text-align: center;">
+                                <strong>
+                                    <span t-if="o.type=='out_invoice'" style="font-size:12px; color: white; background-color: darkred;">&#160;&#160;&#160;&#160;&#160;FACTURA&#160;&#160;&#160;&#160;&#160;</span>
+                                    <span t-if="o.type=='out_refund'" style="font-size:12px; color: white; background-color: darkred;">&#160;&#160;&#160;&#160;&#160;NOTA DE CREDITO&#160;&#160;&#160;&#160;&#160;</span>
+                                    <BR/><BR/>
+                                    <span t-raw="'%s &lt;br&gt;' % o.invoice_sequence_id.approval_id and o.invoice_sequence_id.approval_id.serie or ''" style="font-size:14px;"/>
+                                    <span style="font-size:14px;">-</span>
+                                    <span t-field="o.number" style="font-size:14px;"/><BR/>
+                                </strong>
+                                <div style="font-size:8px;">
+                                    <b>Folio Fiscal</b><BR/> <span t-field="o.cfdi_folio_fiscal"/><BR/>
+                                    <b>Serie Certificado del SAT</b><BR/> <span t-field="o.cfdi_no_certificado"/><BR/>
+                                    <b>Certificado Emisor</b><BR/> <span t-field="o.no_certificado"/><BR/>
+                                    <b>Fecha y Hora de Certificación</b><BR/> <span t-field="o.cfdi_fecha_timbrado"/><BR/>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" style="border: 1px solid white;">
+                                <p style="margin-left: 10px;"><strong>CLIENTE: </strong></p>
+                                <p style="margin-left: 20px;">
+                                    <span t-raw="'%s &lt;br&gt;' % o.partner_id.parent_id.name if o.partner_id.parent_id else o.partner_id.name"/>
+                                    <BR/>
+                                    RFC: <span t-raw="'%s &lt;br&gt;' % o.partner_id.parent_id.vat_split if o.partner_id.parent_id else o.partner_id.vat_split"/>
+                                    <BR/>
+                                    <span t-raw="'%s &lt;br&gt;' % o.partner_id.parent_id.street if o.partner_id.parent_id else o.partner_id.street"/>
+                                    <span t-if="o.partner_id.parent_id">
+                                        <span t-if="o.partner_id.parent_id.l10n_mx_street3"> No. <span t-field="o.partner_id.parent_id.l10n_mx_street3"/></span>
+                                        <span t-if="o.partner_id.parent_id.l10n_mx_street4"> Int. <span t-field="o.partner_id.parent_id.l10n_mx_street4"/></span>
+                                    </span>
+                                    <span t-if="not o.partner_id.parent_id">
+                                        <span t-if="o.partner_id.l10n_mx_street3"> No. <span t-field="o.partner_id.l10n_mx_street3"/></span>
+                                        <span t-if="o.partner_id.l10n_mx_street4"> Int. <span t-field="o.partner_id.l10n_mx_street4"/></span>
+                                    </span>
+                                    <BR/>
+                                    <span t-raw="'%s &lt;br&gt;' % o.partner_id.parent_id.street2 if o.partner_id.parent_id else o.partner_id.street2"/>
+                                    <span t-raw="'%s &lt;br&gt;' % (o.partner_id.parent_id.l10n_mx_city2 if o.partner_id.parent_id else o.partner_id.l10n_mx_city2)"/>
+                                    <span t-raw="'%s &lt;br&gt;' % o.partner_id.parent_id.city if o.partner_id.parent_id else o.partner_id.city"/>, 
+                                    <span t-raw="'%s &lt;br&gt;' % o.partner_id.parent_id.state_id.name if o.partner_id.parent_id else o.partner_id.state_id.name"/>, 
+                                    <span t-raw="'%s &lt;br&gt;' % o.partner_id.parent_id.country_id.name if o.partner_id.parent_id else o.partner_id.country_id.name"/>
+                                    CP: <span t-raw="'%s &lt;br&gt;' % o.partner_id.parent_id.zip if o.partner_id.parent_id else o.partner_id.zip"/>
+                                </p>
+                            </td>
+                            <td colspan="3" style="border: 1px solid white;">
+                                <p style="margin-left: 5px;"><strong>DIRECCION DE ENVIO: </strong></p>
+                                <BR/>
+                                <p style="margin-left: 20px;">
+                                    <span t-field="o.partner_shipping_id.name"/>
+                                    <BR/>
+                                    <span t-field="o.partner_shipping_id.street"/>
+                                    <span t-if="o.partner_shipping_id.l10n_mx_street3"> No. <span t-field="o.partner_shipping_id.l10n_mx_street3"/></span>
+                                    <span t-if="o.partner_shipping_id.l10n_mx_street4"> Int. <span t-field="o.partner_shipping_id.l10n_mx_street4"/></span>
+                                    <BR/>
+                                    <span t-field="o.partner_shipping_id.street2"/>
+                                    <span t-if="o.partner_shipping_id.l10n_mx_city2"><span t-field="o.partner_shipping_id.l10n_mx_city2"/>, </span>
+                                    <span t-field="o.partner_shipping_id.city"/>,
+                                    <span t-field="o.partner_shipping_id.state_id.name"/>,
+                                    <span t-field="o.partner_shipping_id.country_id.name"/>
+                                    CP: <span t-field="o.partner_shipping_id.zip"/>
+                                </p>
+                                <!--<div name="invoice_address" />-->
+                            </td>
+                            <td colspan="3" style="border: 1px solid white; text-align: center;">
+                                <!--<span t-if="o.type=='out_invoice'" style="font-size:12px; color: white; background-color: darkred;">-->
+                                <span style="font-size:12px; color: white; background-color: darkred;">
+                                    <strong>        
+                                            &#160;&#160;&#160;&#160;&#160;EXPEDICIÓN&#160;&#160;&#160;&#160;&#160;
+                                    </strong>
+                                </span>
+                                <BR/><BR/>
+                                <t t-if="o.invoice_sequence_id.approval_id.serie == 'HM' or o.invoice_sequence_id.approval_id.serie=='HMUSD' or o.invoice_sequence_id.approval_id.serie=='NCHM' or o.invoice_sequence_id.approval_id.serie=='NCHMUSD'">
+                                    <span style="font-size:10px;" t-field="o.address_issued_id.street"/>
+                                    <span style="font-size:10px;" t-if="o.address_issued_id.l10n_mx_street3"> No. <span t-field="o.address_issued_id.l10n_mx_street3"/></span>
+                                    <span style="font-size:10px;" t-if="o.address_issued_id.l10n_mx_street4"> Int. <span t-field="o.address_issued_id.l10n_mx_street4"/></span>
+                                    <BR/>
+                                    <span style="font-size:10px;" t-field="o.address_issued_id.city"/>,
+                                    <span style="font-size:10px;" t-field="o.address_issued_id.state_id.name"/>,
+                                    <span style="font-size:10px;" t-field="o.address_issued_id.country_id.name"/><BR/>
+                                </t>
+                                <t t-if="o.invoice_sequence_id.approval_id.serie == 'CL' or o.invoice_sequence_id.approval_id.serie== 'CLUSD' or o.invoice_sequence_id.approval_id.serie=='NCCL' or o.invoice_sequence_id.approval_id.serie=='NCCLUSD'">
+                                    <span style="font-size:10px;">
+                                         Blvd. Emiliano Zapata No. 5515<BR/> 
+                                         Col. Bachigualato, C.P. 80140<BR/>
+                                         Culiacán, Sinaloa, México.<BR/>
+                                    </span>
+                                </t>
+                                <!--Fecha Emisi�n:--> 
+                                <span style="font-size:10px;" t-field="o.invoice_datetime"/><BR/>
+                            </td>
+                        </tr>
+                    </table>
+                    <t t-if="o.type=='out_invoice'">
+                        <!--)<span style="font-size:8px;" t-field="o.payment_term_id"/>(-->
+                        <table class="table table-condensed" style="font-size:9px" width="100%" cellspacing="0" cellpadding="5">
+                        <tbody>
+                        <tr style="color: white; background-color: darkred;">
+                        <td style="border: 1px solid black;"><b>Vendedor (Pedido de Venta)</b></td>
+                        <td style="border: 1px solid black;"><b>Forma de pago</b></td>
+                        <td style="border: 1px solid black;"><b>Método de pago</b></td>
+                        <td style="border: 1px solid black;"><b>Cta. de Pago</b></td>
+                        <td style="border: 1px solid black;"><b>Condición de pago</b></td>
+                        <td style="border: 1px solid black;"><b>Moneda</b></td>
+                        </tr>
+                        <tr>
+                        <td style="border: 1px solid black;"><span t-field= "o.user_id"  /> ( <span t-field="o.origin"/> )</td>
+                        <td style="border: 1px solid black;"><span t-field="o.forma_pago" /></td>
+                        <td style="border: 1px solid black;"><span t-raw="'%s &lt;br&gt;' % o.pay_method_ids and ','.join(['[' + x.code + ' ' + x.name + '] - ' for x in o.pay_method_ids]) or o.pay_method_id.code or '99'"/></td>
+                        <td style="border: 1px solid black;"><span t-raw="'%s &lt;br&gt;' % o.acc_payment and o.acc_payment.last_acc_number or 'N/A'"/></td>
+                        <td style="border: 1px solid black;"><span t-raw="'%s &lt;br&gt;' % o.payment_term_id and o.payment_term_id.name or 'Contado'"/></td>
+                        <td style="border: 1px solid black;"><span t-field= "o.currency_id" /></td>
+                        </tr>
+                        </tbody>
+                        </table>
+                    </t>
+                    <t t-if="o.type=='out_refund'">
+                        <span style="font-size:10px;"><b>Método de pago: </b><span t-raw="'%s &lt;br&gt;' % o.pay_method_ids and ','.join(['[' + x.code + ' ' + x.name + '] - ' for x in o.pay_method_ids]) or o.pay_method_id.code or '99'"/></span>
+                    </t>
+                    <div style="display:none;" name="reference" t-if="o.reference"><span t-field="o.reference"/></div>
+                    <table class="table table-condensed" style="font-size:9px">
+                        <thead>
+                            <tr style="font-size:9px; color: white; background-color: darkred">
+                                <th style="width:10%;" class="text-right">Cantidad</th>
+                                <th style="width:15%;text-align:center;">Código</th>
+                                <th style="width:40%;text-align:center;">Descripción</th>
+                                <t t-if="o.type=='out_invoice'"><th style="width:10%;text-align:center;">Unidad</th></t>                        
+                                <th style="width:12%;" class="text-right">Precio Unitario</th>                        
+                                <th style="width:13%;" class="text-right">Importe</th>
+                            </tr>
+                        </thead>                
+                        <tbody class="invoice_tbody">
+                            <tr t-foreach="o.invoice_line_ids" t-as="l">
+                                <td class="text-right"><span t-field="l.quantity"/></td>                        
+                                <td style="text-align:center;">
+                                    <span t-raw="'%s &lt;br&gt;' % l.product_id and l.product_id.default_code or ''"/>
+                                </td>
+                                <td><!--<span t-field="l.name"/>-->
+                                    <span t-raw="'%s &lt;br&gt;' % l.name if l.name.find('] ') &lt; 0 else l.name[l.name.find('] ')+2:]"/>
+                                    <!--br t-if="l.get_lot_numbers()"/>
+                                    <span  t-esc="l.get_lot_numbers()"/-->
+
+                                    <br t-if="l.get_pedimentos()"/>
+                                    <span  t-esc="l.get_pedimentos()"/>
+
+                                </td>
+                                <t t-if="o.type=='out_invoice'"><td style="text-align:center;"><span t-field="l.uom_id"/></td></t>
+                                <td class="text-right"><span t-field="l.price_unit"/></td>
+                                <td class="text-right"><span t-field="l.price_subtotal" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div class="row" style="font-size:9px">
+                        <div class="col-xs-4">
+                            <b>Notas/Condiciones:</b><BR/>
+                            <span t-field="o.comment"/>
+                        </div>
+                        <div class="col-xs-4 pull-right">
+                            <table class="table">
+                                <tr class="border-black">
+                                    <td style="font-size:9px; color: white; background-color: darkred;" class="text-right"><strong>SubTotal</strong></td>
+                                    <td class="text-right">
+                                        <span t-field="o.amount_untaxed" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                                    </td>
+                                </tr>
+                                <tr t-foreach="o.tax_line_ids" t-as="t" class="border-black">
+                                    <td style="font-size:9px; color: white; background-color: darkred;" class="text-right"><span t-field="t.tax_id.description"/></td>
+                                    <td class="text-right">
+                                        <span t-field="t.abs_amount" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                                    </td>
+                                </tr>
+                                <tr class="border-black">
+                                    <td style="font-size:9px; color: white; background-color: darkred;" class="text-right"><strong>Total</strong></td>
+                                    <td class="text-right">
+                                         <span t-field="o.amount_total" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <table  style="font-size:9px">
+                        <tr>
+                            <td style="font-size:10px; text-align:left;">
+                                <b>Referencia/Descripción: </b><span t-field="o.name"/><BR/>
+                                <b>Cantidad con letra: </b> SON <span t-field="o.amount_to_text"/>
+                            </td>
+                        </tr>
+                    </table>
+                    
+                    <table class="table table-condensed" style="font-size:8px">
+                        <tr>
+                            <td rowspan="5">
+                                <img t-if="o.cfdi_cbb" t-att-src="'data:image/png;base64,%s' % o.cfdi_cbb" style="width:5.5cm;height:5.5cm;"/>
+                            </td>
+                            <td>
+                               <b>CUENTAS BANCARIAS:<BR/>
+                               En Moneda Nacional (MXN):</b><BR/>
+                               BANCO: BANAMEX HERMOSILLO CTA: 5522546 SUCURSAL: 254 CLABE: 002760025455225465<BR/>
+                               BANCO: BANAMEX CULIACAN CTA: 4884885 SUCURSAL: 7004 CLABE: 002730700448848858<BR/>
+                               <b>En Moneda Extranjera dólares (USD):</b><BR/> 
+                               BANCO: BANAMEX HERMOSILLO CTA: 9146808 SUCURSAL: 254 CLABE: 002760025491468082<BR/><BR/>
+                               <b>Favor de revisar su mercancia, en caso de devolución se cobrará un 20% del valor de la mercancía.</b><BR/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><b>Cadena Original del complemento de certificación digital del SAT:</b><BR/><span t-field="o.cfdi_cadena_original" style="display:block;width:500px;word-wrap:break-word;"/></td>
+                        </tr>
+                        <tr>
+                            <td><b>Sello Digital del CFDI:</b><BR/><span t-field="o.sello" style="display:block;width:500px;word-wrap:break-word;"/></td>
+                        </tr>
+                        <tr>
+                            <td><b>Sello del SAT:</b><BR/><span t-field="o.cfdi_sello" style="display:block;width:500px;word-wrap:break-word;"/></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <center>
+                                    <b>Este documento es una representación impresa de un CFDI</b>
+                                </center>
+                            </td>
+                        </tr>
+                    </table>
+                    
+                    <!-- <span t-if="o.payment_term_id != 'Pago Inmediato'"> 
+                    <span t-if="o.payment_term_id == 'Pago Inmediato'; % 'style="font-size:10px; display:none"' or 'style="font-size:10px; display:visible"'"/>
+                    -->
+
+                    <t t-if="o.type=='out_invoice'">
+                        <t t-if="o.payment_term_id and o.payment_term_id.name != 'Pago Inmediato' and o.payment_term_id.name != 'Pago inmediato'">
+                            <div>
+                                <table class="table table-condensed" style="font-size:10px;">
+                                    <tr>
+                                        <td>
+                                            Por este pagaré prometo(emos) y me (nos) obligo (amos) a pagar incondicionalmente a la orden de
+                                            <b><span t-field="o.company_emitter_id.partner_id.name"/></b>
+                                            en cualquier parte de la República a eleccion del beneficiario, el día  
+                                            <b><span t-field="o.date_due"/></b>, la cantidad de 
+                                            <b><span t-field="o.amount_total" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: o.currency_id}"/>
+                                            (SON: <span t-field="o.amount_to_text"/>)</b>, suma a la que se le agregará un interés moratorio de <b>2% mensual</b> por el tiempo que permanezca insólito este documento.
+                                            Folio Factura:
+                                            <b><span t-raw="'%s &lt;br&gt;' % o.invoice_sequence_id.approval_id and o.invoice_sequence_id.approval_id.serie or ''"/>
+                                            <span>- </span><span t-field="o.number"/></b>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <center>
+                                            <BR/><BR/><BR/>__________________________________________________________<BR/>
+                                            ACEPTO(AMOS) SELLO Y FIRMA
+                                            </center>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </t>
+                    </t>
+                </div>
+            </xpath>
+        </template>
+    </data>
+</openerp>
